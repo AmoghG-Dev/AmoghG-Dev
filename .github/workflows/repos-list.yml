@@ -1,0 +1,41 @@
+name: Update README with Repository List
+on:
+  schedule:
+    - cron: '0 */12 * * *'  # every 12 hours
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo content
+        uses: actions/checkout@v3
+
+      - name: Get Repository List
+        id: repos
+        run: |
+          echo "📦 Fetching repositories..."
+          repos=$(curl -s "https://api.github.com/users/${{ github.repository_owner }}/repos?per_page=100&sort=updated" \
+          | jq -r '.[] | "- [" + .name + "](" + .html_url + ") — " + (.language // "Unknown") + " | ⭐ " + (.stargazers_count|tostring)' )
+          echo "repos<<EOF" >> $GITHUB_OUTPUT
+          echo "$repos" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Update README
+        run: |
+          echo "📝 Updating README..."
+          awk -v new="$(
+            echo "${{ steps.repos.outputs.repos }}"
+          )" '/<!--START_SECTION:repos-->/, /<!--END_SECTION:repos-->/ {
+            if ($0 ~ /<!--START_SECTION:repos-->/) { print; print new; next }
+            if ($0 ~ /<!--END_SECTION:repos-->/) { print; next }
+            next
+          }1' README.md > temp && mv temp README.md
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Auto-update repository list with stars & languages" || echo "No changes to commit"
+          git push
