@@ -59,10 +59,10 @@ I also worked with MySQL, Postgres.
 
 ## 📂 My GitHub Projects  
 <!--START_SECTION:repos-->
+- [AmoghG-Dev](https://github.com/AmoghG-Dev/AmoghG-Dev) — Unknown | ⭐ 0
 - [social-media-app](https://github.com/AmoghG-Dev/social-media-app) — TypeScript | ⭐ 0
 - [job-portal](https://github.com/AmoghG-Dev/job-portal) — JavaScript | ⭐ 0
 - [uber-clone](https://github.com/AmoghG-Dev/uber-clone) — JavaScript | ⭐ 0
-- [AmoghG-Dev](https://github.com/AmoghG-Dev/AmoghG-Dev) — Unknown | ⭐ 0
 <!--END_SECTION:repos-->
 
 ---
